@@ -5,6 +5,7 @@
 #include <cstring>
 #include <fstream>
 #include <cstring>
+#include <cctype>
 
 using namespace std;
 
@@ -15,16 +16,22 @@ struct NODES{
 };
 
 void openFILE(ifstream& file);
+string formatWORDS(string wordIN);
 
 int main(){
-  string word = "hi how are you.";
+  string word;
   ifstream grabFILE;  
 
   NODES *arrayOfPointers[26] = {0};
   arrayOfPointers[26] = new NODES;
   openFILE(grabFILE);
   if(grabFILE.is_open()){
-    cout << "file opened..." << endl;
+    while(grabFILE){
+      grabFILE >> word;
+      formatWORDS(word);
+      cout << "NEXT WORD:" << endl;
+    }
+    
   }
   
 }
@@ -38,4 +45,17 @@ void openFILE(ifstream& file){
     cout << "Whoops! file not found? Try again." << endl;
     openFILE(file);
   }
+}
+string formatWORDS(string wordIN){
+  string wordOUT;
+  int count = 0;
+  int wordLENGTH = wordIN.length();
+  while(wordLENGTH != 0){
+  wordIN[count] = toupper(wordIN[count]);
+  cout << wordIN[count];
+  count++;
+  --wordLENGTH;
+  }
+  cout << endl;
+  return wordOUT;
 }
