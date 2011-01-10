@@ -1,0 +1,35 @@
+#include <cstdlib>
+#include <cstdio>
+#include <stdio.h>
+#include <iostream>
+#include <cstring>
+#include <fstream>
+
+using namespace std; 
+
+struct NODES{
+  string word;
+  NODES* forward;
+  NODES* backwards;
+};
+
+void  openFILE();
+
+int main(){ 
+  string word = "hi how are you.";
+
+  NODES *arrayOfPointers[26] = {0};
+  arrayOfPointers[26] = new NODES;
+}
+void openFILE(){
+  string filename;
+  ifstream inFILE;
+
+  cout << "Enter filename you wish to open." << endl;
+  cin >> filename;
+  inFILE.open(filename.c_str);  
+  if(!inFILE){
+    cout << "Sorry file not found?/nCheck the file name and try again." << endl;
+    openFILE();
+  }
+}
