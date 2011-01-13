@@ -63,22 +63,27 @@ bool antiNUMBERS(string wordIN){
   return noNUMBERS;
 }
 string characterCHECK(string wordIN){
- int count = 0;
+  int count = 0, index = 0;
  int wordLENGTH = wordIN.length();///get length of individual words
  string *pt = 0;
+ char wordOUT[wordLENGTH];
   
   while(wordLENGTH != 0){///set for end of word halt
-    while(!isalpha(wordIN[count])){
-      //cout << "found!: " << wordIN[count] << endl;
+    if(isalpha(wordIN[count])){
+      wordOUT[index] = wordIN[count];
+      index++;
+    }
+    else{
       pt = new string[1];
       *pt = wordIN[count];
       wordIN[count] = wordIN[count + 1];
-      pt = 0;
       delete [] pt;
     }
   count++;///increment to count through each character in the array
   --wordLENGTH;///halts when end of word is reached
   } 
+  wordIN((LPCTSTR)wordOUT);
+  wordIN(wordLENGTH, index)
   return wordIN;
 }
 string formatWORDS(string wordIN){
