@@ -1,10 +1,5 @@
-#include <cstdlib>
-#include <cstdio>
-#include <stdio.h>
 #include <iostream>
-#include <cstring>
 #include <fstream>
-#include <cstring>
 #include <cctype>
 
 using namespace std;
@@ -16,11 +11,15 @@ struct NODES{
 };
 
 void openFILE(ifstream& file);
+bool antiNUMBERS(string wordIN);
+string characterCHECK(string wordIN);
 string formatWORDS(string wordIN);
+
 
 int main(){
   string word;
-  ifstream grabFILE;  
+  ifstream grabFILE; 
+  bool removeNUM = true; 
 
   NODES *arrayOfPointers[26] = {0};
   arrayOfPointers[26] = new NODES;
@@ -28,8 +27,12 @@ int main(){
   if(grabFILE.is_open()){
     while(grabFILE){
       grabFILE >> word;
-      formatWORDS(word);
-      cout << "NEXT WORD:" << endl;
+      removeNUM = antiNUMBERS(word);
+      if(removeNUM){
+      word = characterCHECK(word);
+      word =  formatWORDS(word);
+      cout << "Approved word: " << word << endl;
+      }
     }
     
   }
@@ -46,16 +49,48 @@ void openFILE(ifstream& file){
     openFILE(file);
   }
 }
-string formatWORDS(string wordIN){
-  string wordOUT;
-  int count = 0;
-  int wordLENGTH = wordIN.length();
-  while(wordLENGTH != 0){
-  wordIN[count] = toupper(wordIN[count]);
-  cout << wordIN[count];
-  count++;
-  --wordLENGTH;
-  }
-  cout << endl;
-  return wordOUT;
+bool antiNUMBERS(string wordIN){
+ int count = 0;
+ bool noNUMBERS = true;
+ int wordLENGTH = wordIN.length();///get length of individual words
+  while(wordLENGTH != 0){///set for end of word halt
+    if(isdigit(wordIN[count])){
+      noNUMBERS = false;
+    }
+  count++;///increment to count through each character in the array
+  --wordLENGTH;///halts when end of word is reached
+  } 
+  return noNUMBERS;
 }
+string characterCHECK(string wordIN){
+ int count = 0;
+ int wordLENGTH = wordIN.length();///get length of individual words
+ string *pt = 0;
+  
+  while(wordLENGTH != 0){///set for end of word halt
+    while(!isalpha(wordIN[count])){
+      //cout << "found!: " << wordIN[count] << endl;
+      pt = new string[1];
+      *pt = wordIN[count];
+      wordIN[count] = wordIN[count + 1];
+      pt = 0;
+      delete [] pt;
+    }
+  count++;///increment to count through each character in the array
+  --wordLENGTH;///halts when end of word is reached
+  } 
+  return wordIN;
+}
+string formatWORDS(string wordIN){
+  int count = 0;
+  int wordLENGTH = wordIN.length();///get length of individual words
+  while(wordLENGTH != 0){///set for end of word halt
+  wordIN[count] = toupper(wordIN[count]);///set each character in array to uppercase
+  count++;///increment to count through each character in the array
+  --wordLENGTH;///halts when end of word is reached
+  }
+  return wordIN;
+}
+
+
+
