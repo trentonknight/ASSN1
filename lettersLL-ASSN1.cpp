@@ -11,21 +11,27 @@ struct NODES{
 };
 
 void openFILE(ifstream& file);
+bool verifyIO(ifstream& file);
 
 int main(){
   char ch;
-  ifstream grabFILE; 
+  ifstream grabFILE;
+  bool ver = true; 
 
   NODES *arrayOfPointers[26] = {0};
   *arrayOfPointers = new NODES;
   openFILE(grabFILE);
   if(grabFILE.is_open()){
-    while(grabFILE){
+    while(grabFILE && ver){
       grabFILE.get(ch);
       if(isalpha(ch)){
       ch = toupper(ch);
-      cout << "Approved letter: " << ch << endl;
+      cout << ch << endl;
       }
+      else if(ch == ' '){
+       cout << ch << endl;
+      }
+      ver = verifyIO(grabFILE);
       }
     
   }
@@ -41,4 +47,17 @@ void openFILE(ifstream& file){
     cout << "Whoops! file not found? Try again." << endl;
     openFILE(file);
   }
+}
+bool verifyIO(ifstream& file){
+
+  bool check = true;
+  ios::iostate i;
+
+  i = file.rdstate();
+  
+  if(i & ios::eofbit|| i & ios::failbit || i & ios::badbit){
+    check = false;
+  }
+
+  return check;
 }
