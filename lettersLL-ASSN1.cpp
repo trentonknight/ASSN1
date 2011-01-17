@@ -1,6 +1,7 @@
 #include <iostream>
 #include <fstream>
 #include <cctype>
+#include <cstring>
 
 using namespace std;
 
@@ -51,12 +52,24 @@ bool verifyIO(ifstream& file){
   return check;
 }
 void cleanUPIO(ifstream& file){
-  string word;
+  char ch;
+  char word[15];
+  string wordSTRING;
   bool ver = true;
+  int index = 0;
 
     while(file && ver){
-      getline(file,word);
-      cout << word << endl;
+      file.get(ch);
+      if(isalpha(ch)){
+        index++;
+        ch = toupper(ch);
+        cout << ch;
+       
+      }
+      else if(ch == ' ' || ch == '\n'){
+       
+	cout << endl;
+      }
       ver = verifyIO(file);
     }
 }
