@@ -13,33 +13,32 @@ struct NODES{
 void openFILE(ifstream& file);
 
 int main(){
-  string word;
+  char ch;
   ifstream grabFILE; 
-  bool removeNUM = true; 
 
   NODES *arrayOfPointers[26] = {0};
-  arrayOfPointers[26] = new NODES;
+  *arrayOfPointers = new NODES;
   openFILE(grabFILE);
   if(grabFILE.is_open()){
-    while(!grabFILE.eof()){
-     grabFILE >> word;
-     cout << "word:" << word << endl;
-     word.clear();
-    }
-    grabFILE.close();
-    }
-
+    while(grabFILE){
+      grabFILE.get(ch);
+      if(isalpha(ch)){
+      ch = toupper(ch);
+      cout << "Approved letter: " << ch << endl;
+      }
+      }
+    
+  }
+  
 }
-
 void openFILE(ifstream& file){
   string filename;
 
   cout << "Enter file name: " << endl;
   cin >> filename;
-  file.open(filename.c_str());
+  file.open(filename.c_str(), ios::binary);
   if(!file){
     cout << "Whoops! file not found? Try again." << endl;
     openFILE(file);
   }
 }
-
