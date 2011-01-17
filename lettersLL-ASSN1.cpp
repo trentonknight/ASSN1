@@ -11,29 +11,18 @@ struct NODES{
 };
 
 void openFILE(ifstream& file);
+void cleanUPIO(ifstream& file);
 bool verifyIO(ifstream& file);
 
 int main(){
-  char ch;
   ifstream grabFILE;
-  bool ver = true; 
+  
 
   NODES *arrayOfPointers[26] = {0};
   *arrayOfPointers = new NODES;
   openFILE(grabFILE);
   if(grabFILE.is_open()){
-    while(grabFILE && ver){
-      grabFILE.get(ch);
-      if(isalpha(ch)){
-      ch = toupper(ch);
-      cout << ch << endl;
-      }
-      else if(ch == ' '){
-       cout << ch << endl;
-      }
-      ver = verifyIO(grabFILE);
-      }
-    
+    cleanUPIO(grabFILE);
   }
   
 }
@@ -60,4 +49,14 @@ bool verifyIO(ifstream& file){
   }
 
   return check;
+}
+void cleanUPIO(ifstream& file){
+  string word;
+  bool ver = true;
+
+    while(file && ver){
+      getline(file,word);
+      cout << word << endl;
+      ver = verifyIO(file);
+    }
 }
