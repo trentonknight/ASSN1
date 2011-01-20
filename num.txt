@@ -1,4 +1,4 @@
-  "Echoing" means displaying the characters that you type.
+  "Echoing" means dis34playing the cha3racters t8hat you type.
 Single-character commands, including most simple editing operations,
 are not echoed.  Multi-character commands are echoed if you pause while
 typing them: if you pause for more than a second in the middle of a

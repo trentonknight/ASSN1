@@ -15,18 +15,25 @@ struct NODES{
 };
 
 void openFILE(ifstream& file);
-void cleanUPIO(ifstream& file);
+string cleanUPIO(string word);
 bool verifyIO(ifstream& file);
 
 int main(){
   ifstream grabFILE;
-  
+  string word;
+  bool ver = true;
 
   NODES *arrayOfPointers[26] = {0};
   *arrayOfPointers = new NODES;
   openFILE(grabFILE);
   if(grabFILE.is_open()){
-    cleanUPIO(grabFILE);
+    while(grabFILE && ver){
+      grabFILE >> word;
+      word = cleanUPIO(word);
+      cout << word << endl;
+      cout << word.length() << endl;
+      ver = verifyIO(grabFILE);
+    }
   }
   
 }
@@ -54,29 +61,22 @@ bool verifyIO(ifstream& file){
 
   return check;
 }
-void cleanUPIO(ifstream& file){
-  string word;
-  bool ver = true;
+string cleanUPIO(string word){
   size_t first, numbers;
 
-    while(file && ver){
-    file >> word;
-    numbers=word.find("1234567890");
+    numbers=word.find_first_of("1234567890");
     while(numbers!=string::npos)
     {
       word.erase();
-      file >> word;
-      numbers=word.find("1234567890");
+      numbers=word.find_first_of("1234567890");
     }
-    first=word.find_first_not_of("abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ");
+    first=word.find_first_not_of("abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ-'");
     while(first!=string::npos)
     {
       word.erase(first, 1);
-      first=word.find_first_not_of("abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ");
+      first=word.find_first_not_of("abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ-'");
     }
-    cout << word << endl;
-    ver = verifyIO(file);
-    }
-   }
+    return word;
+  }
 
 
