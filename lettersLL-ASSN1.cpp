@@ -1,6 +1,9 @@
 #include <iostream>
 #include <fstream>
 #include <cctype>
+#include <iomanip>
+#include <stdio.h>
+#include <string.h>
 #include <cstring>
 
 using namespace std;
@@ -52,24 +55,28 @@ bool verifyIO(ifstream& file){
   return check;
 }
 void cleanUPIO(ifstream& file){
-  char ch;
-  char word[15];
-  string wordSTRING;
+  string word;
   bool ver = true;
-  int index = 0;
+  size_t first, numbers;
 
     while(file && ver){
-      file.get(ch);
-      if(isalpha(ch)){
-        index++;
-        ch = toupper(ch);
-        cout << ch;
-       
-      }
-      else if(ch == ' ' || ch == '\n'){
-       
-	cout << endl;
-      }
-      ver = verifyIO(file);
+    file >> word;
+    numbers=word.find("1234567890");
+    while(numbers!=string::npos)
+    {
+      word.erase();
+      file >> word;
+      numbers=word.find("1234567890");
     }
-}
+    first=word.find_first_not_of("abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ");
+    while(first!=string::npos)
+    {
+      word.erase(first, 1);
+      first=word.find_first_not_of("abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ");
+    }
+    cout << word << endl;
+    ver = verifyIO(file);
+    }
+   }
+
+
