@@ -16,7 +16,9 @@ struct NODES{
 
 void openFILE(ifstream& file);
 string cleanUPIO(string word);
+string upperCASE(string wordIN);
 bool verifyIO(ifstream& file);
+void addWordsToCorrectDoubleLinkedList(string wordDLL);
 
 int main(){
   ifstream grabFILE;
@@ -30,8 +32,8 @@ int main(){
     while(grabFILE && ver){
       grabFILE >> word;
       word = cleanUPIO(word);
-      cout << word << endl;
-      cout << word.length() << endl;
+      word = upperCASE(word);
+      addWordsToCorrectDoubleLinkedList(word);
       ver = verifyIO(grabFILE);
     }
   }
@@ -78,5 +80,20 @@ string cleanUPIO(string word){
     }
     return word;
   }
+string upperCASE(string wordIN){
+  int count = 0;
+  int wordLENGTH = wordIN.length();
 
+  while(wordLENGTH != 0){
+  wordIN[count] = toupper(wordIN[count]);
+  count++;
+  --wordLENGTH;
+  }
+  return wordIN;
+}
 
+void addWordsToCorrectDoubleLinkedList(string wordDLL){
+  ///dont forget to check length of each string words = 0
+  ///do not get added to a list
+
+}
