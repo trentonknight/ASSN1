@@ -18,24 +18,27 @@ void openFILE(ifstream& file);
 string cleanUPIO(string word);
 string upperCASE(string wordIN);
 bool verifyIO(ifstream& file);
-void addWordsToCorrectDoubleLinkedList(string wordDLL);
+NODES *addWordsToCorrectDoubleLinkedList(NODES **current,string wordDLL);
+void printNODES(NODES *newNode);
 
 int main(){
+  NODES *nodeARRAY[26] = {0};
+  *nodeARRAY = new NODES;
   ifstream grabFILE;
   string word;
   bool ver = true;
 
-  NODES *arrayOfPointers[26] = {0};
-  *arrayOfPointers = new NODES;
   openFILE(grabFILE);
   if(grabFILE.is_open()){
     while(grabFILE && ver){
       grabFILE >> word;
       word = cleanUPIO(word);
       word = upperCASE(word);
-      addWordsToCorrectDoubleLinkedList(word);
+      *nodeARRAY = new NODES;
+      addWordsToCorrectDoubleLinkedList(nodeARRAY,word);
       ver = verifyIO(grabFILE);
     }
+    printNODES(*nodeARRAY);    
   }
   
 }
@@ -92,8 +95,36 @@ string upperCASE(string wordIN){
   return wordIN;
 }
 
-void addWordsToCorrectDoubleLinkedList(string wordDLL){
-  ///dont forget to check length of each string words = 0
-  ///do not get added to a list
+NODES *addWordsToCorrectDoubleLinkedList(NODES **current,string wordDLL){
+  NODES *head[26] = {0};
+  *head = new NODES;
+  NODES *tail[26] = {0};
+
+  *tail = new NODES;
+  *head = *current;
+  *tail = *current;  
+
+  int wordSIZE = 0, letter = 0;
+  wordSIZE = wordDLL.length();
+  
+  if(wordSIZE > 0){
+    letter = wordDLL[0] - 'A';
+    while(current[letter] != 0){
+      current[letter] = current[letter]->forward;
+    }
+    current[letter] = new NODES;
+    current[letter]->word = wordDLL;
+    if(tail[letter] == 0){
+    current[letter]->backwards = 0;
+    current[letter]->forward = head[letter];
+    head[letter] = current[letter];
+    }
+
+  }
+  return *current;
+}
+void printNODES(NODES newNode[]){
+ 
+ 
 
 }
