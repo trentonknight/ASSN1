@@ -18,7 +18,7 @@ void openFILE(ifstream& file);
 string cleanUPIO(string word);
 string upperCASE(string wordIN);
 bool verifyIO(ifstream& file);
-NODES *addWordsToCorrectDoubleLinkedList(NODES **current,string wordDLL);
+NODES *addWordsFORWARD(NODES **current,string wordDLL);
 void printNODES(NODES *newNode);
 
 int main(){
@@ -35,10 +35,11 @@ int main(){
       word = cleanUPIO(word);
       word = upperCASE(word);
       *nodeARRAY = new NODES;
-      addWordsToCorrectDoubleLinkedList(nodeARRAY,word);
+      *nodeARRAY = addWordsFORWARD(nodeARRAY,word);
       ver = verifyIO(grabFILE);
+      cout << nodeARRAY[0]->word << endl;
     }
-    printNODES(*nodeARRAY);    
+      printNODES(*nodeARRAY);  
   }
   
 }
@@ -95,14 +96,10 @@ string upperCASE(string wordIN){
   return wordIN;
 }
 
-NODES *addWordsToCorrectDoubleLinkedList(NODES **current,string wordDLL){
+NODES *addWordsFORWARD(NODES **current,string wordDLL){
   NODES *head[26] = {0};
   *head = new NODES;
-  NODES *tail[26] = {0};
-
-  *tail = new NODES;
-  *head = *current;
-  *tail = *current;  
+  *head = *current;  
 
   int wordSIZE = 0, letter = 0;
   wordSIZE = wordDLL.length();
@@ -114,8 +111,7 @@ NODES *addWordsToCorrectDoubleLinkedList(NODES **current,string wordDLL){
     }
     current[letter] = new NODES;
     current[letter]->word = wordDLL;
-    if(tail[letter] == 0){
-    current[letter]->backwards = 0;
+    if(current[letter] == 0){
     current[letter]->forward = head[letter];
     head[letter] = current[letter];
     }
@@ -124,7 +120,13 @@ NODES *addWordsToCorrectDoubleLinkedList(NODES **current,string wordDLL){
   return *current;
 }
 void printNODES(NODES newNode[]){
- 
- 
+   NODES *print[26] = {0};
+  *print = new NODES;
+  **print = *newNode;
+
+  for(int a = 0; a < 26; a++){
+    cout << print[0]->word << endl;
+
+  }
 
 }
