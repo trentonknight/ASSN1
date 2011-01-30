@@ -13,17 +13,22 @@ struct NODES{
   NODES* forward;
   NODES* backwards;
 };
+struct LIST{
+  NODES* firstNODE;
+  NODES* lastNODE;
+};
 
 void openFILE(ifstream& file);
 string cleanUPIO(string word);
 string upperCASE(string wordIN);
 bool verifyIO(ifstream& file);
-NODES *addWordsFORWARD(NODES **current,string wordDLL);
-void printNODES(NODES *newNode);
+void insertEND(LIST** list, NODES** newNODE,string word);
+void insertBEGIN(LIST** list, NODES** newNODE,int& index);
+void insertAFTER(LIST** list, NODES** node, NODES** newNODE,int& index);
 
 int main(){
-  NODES *nodeARRAY[26] = {0};
-  *nodeARRAY = new NODES;
+  NODES *newNODE[26] = {0};
+  LIST *list[26] = {0};
   ifstream grabFILE;
   string word;
   bool ver = true;
@@ -34,15 +39,12 @@ int main(){
       grabFILE >> word;
       word = cleanUPIO(word);
       word = upperCASE(word);
-      *nodeARRAY = new NODES;
-      *nodeARRAY = addWordsFORWARD(nodeARRAY,word);
+      insertEND(list,newNODE,word);
       ver = verifyIO(grabFILE);
-      cout << nodeARRAY[0]->word << endl;
     }
-      printNODES(*nodeARRAY);  
   }
-  
 }
+  
 void openFILE(ifstream& file){
   string filename;
 
@@ -70,63 +72,73 @@ bool verifyIO(ifstream& file){
 string cleanUPIO(string word){
   size_t first, numbers;
 
-    numbers=word.find_first_of("1234567890");
-    while(numbers!=string::npos)
+  numbers=word.find_first_of("1234567890");
+  while(numbers!=string::npos)
     {
       word.erase();
       numbers=word.find_first_of("1234567890");
     }
-    first=word.find_first_not_of("abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ-'");
-    while(first!=string::npos)
+  first=word.find_first_not_of("abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ-'");
+  while(first!=string::npos)
     {
       word.erase(first, 1);
       first=word.find_first_not_of("abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ-'");
     }
-    return word;
-  }
+  return word;
+}
 string upperCASE(string wordIN){
   int count = 0;
   int wordLENGTH = wordIN.length();
 
   while(wordLENGTH != 0){
-  wordIN[count] = toupper(wordIN[count]);
-  count++;
-  --wordLENGTH;
+    wordIN[count] = toupper(wordIN[count]);
+    count++;
+    --wordLENGTH;
   }
   return wordIN;
 }
+void insertEND(LIST** list, NODES** newNODE,string word){
+  int index = 0, wordSIZE = 0;
+  NODES *last[26] = {0};
 
-NODES *addWordsFORWARD(NODES **current,string wordDLL){
-  NODES *head[26] = {0};
-  *head = new NODES;
-  *head = *current;  
-
-  int wordSIZE = 0, letter = 0;
-  wordSIZE = wordDLL.length();
-  
+  wordSIZE = word.length();
   if(wordSIZE > 0){
-    letter = wordDLL[0] - 'A';
-    while(current[letter] != 0){
-      current[letter] = current[letter]->forward;
-    }
-    current[letter] = new NODES;
-    current[letter]->word = wordDLL;
-    if(current[letter] == 0){
-    current[letter]->forward = head[letter];
-    head[letter] = current[letter];
-    }
+    index = word[0] - 'A';
+    newNODE[index] = new NODES;
+    list[index] = new LIST;
+    newNODE[index]->word = word;
+    if(list[index]->lastNODE == NULL){
+      insertBEGIN(list,newNODE,index);
+    }  
+    else{
+      *last = new NODES;
+      last[index] = list[index]->lastNODE;
+       insertAFTER(list,last,newNODE,index);
+     }
+   }
+ }
+ void insertBEGIN(LIST** list,NODES** newNODE,int& index){
+   NODES *next[26] = {0};
+   *next = new NODES;
+  
+  
 
+   if(list[index] == 0){
+     list[index]->firstNODE = newNODE[index];
+     list[index]->lastNODE = newNODE[index];
+     newNODE[index]->backwards = 0;
+     newNODE[index]->forward = 0;
+   }
+   else{
+     *next = new NODES;
+     next[index] = list[index]->firstNODE;
+    insertAFTER(list,next,newNODE,index);
   }
-  return *current;
 }
-void printNODES(NODES newNode[]){
-   NODES *print[26] = {0};
-  *print = new NODES;
-  **print = *newNode;
 
-  for(int a = 0; a < 26; a++){
-    cout << print[0]->word << endl;
-
-  }
-
+void insertAFTER(LIST** list,NODES** node, NODES** newNODE,int& index){
+   
+  
 }
+
+
