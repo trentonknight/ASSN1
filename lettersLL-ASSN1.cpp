@@ -24,7 +24,8 @@ string upperCASE(string wordIN);
 bool verifyIO(ifstream& file);
 void insertEND(LIST** list, NODES** newNODE,string word);
 void insertBEGIN(LIST** list, NODES** newNODE,int& index);
-void insertAFTER(LIST** list, NODES** node, NODES** newNODE,int& index);
+void insertAFTER(LIST** list, NODES** last, NODES** newNODE,int& index);
+void insertBEFORE(LIST** list,NODES** next,NODES** newNODE,int& index);
 
 int main(){
   NODES *newNODE[26] = {0};
@@ -43,6 +44,7 @@ int main(){
       ver = verifyIO(grabFILE);
     }
   }
+  cout << "END." << endl;
 }
   
 void openFILE(ifstream& file){
@@ -121,24 +123,40 @@ void insertEND(LIST** list, NODES** newNODE,string word){
    NODES *next[26] = {0};
    *next = new NODES;
   
-  
-
-   if(list[index] == 0){
+   if(list[index]->firstNODE == 0){
      list[index]->firstNODE = newNODE[index];
      list[index]->lastNODE = newNODE[index];
      newNODE[index]->backwards = 0;
      newNODE[index]->forward = 0;
    }
    else{
-     *next = new NODES;
      next[index] = list[index]->firstNODE;
-    insertAFTER(list,next,newNODE,index);
+     insertBEFORE(list,next,newNODE,index);
   }
 }
 
-void insertAFTER(LIST** list,NODES** node, NODES** newNODE,int& index){
-   
-  
+void insertAFTER(LIST** list,NODES** last, NODES** newNODE,int& index){
+  newNODE[index]->backwards = last[index];
+  newNODE[index]->forward = last[index]->forward;
+  if(last[index] == NULL){
+    list[index]->lastNODE = newNODE[index];
+  }
+  else{
+    last[index]->forward = newNODE[index];
+  }
+  last[index]->forward = newNODE[index];
+}
+void insertBEFORE(LIST** list,NODES** next,NODES** newNODE,int& index){
+  next[index] = new NODES;
+  newNODE[index]->backwards = next[index]->backwards;
+  newNODE[index]->forward = next[index];
+  if(next[index] == 0){
+    list[index]->firstNODE = newNODE[index];
+  }
+  else{
+    next[index]->forward = newNODE[index];
+  }
+   next[index]->backwards = newNODE[index];
 }
 
 
