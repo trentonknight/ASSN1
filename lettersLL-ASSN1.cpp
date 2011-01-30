@@ -22,14 +22,10 @@ void openFILE(ifstream& file);
 string cleanUPIO(string word);
 string upperCASE(string wordIN);
 bool verifyIO(ifstream& file);
-void insertEND(LIST** list, NODES** newNODE,string word);
-void insertBEGIN(LIST** list, NODES** newNODE,int& index);
-void insertAFTER(LIST** list, NODES** last, NODES** newNODE,int& index);
-void insertBEFORE(LIST** list,NODES** next,NODES** newNODE,int& index);
+NODES *insertNODE(LIST** list, NODES** newNODE,string word);
 
 int main(){
   NODES *newNODE[26] = {0};
-  NODES *readNODES[26] = {0};
   LIST *list[26] = {0};
   
   ifstream grabFILE;
@@ -42,13 +38,10 @@ int main(){
       grabFILE >> word;
       word = cleanUPIO(word);
       word = upperCASE(word);
-      insertEND(list,newNODE,word);
+      insertNODE(list,newNODE,word);
       ver = verifyIO(grabFILE);
     }
   }
- 
-  **readNODES = *(*list)->firstNODE;
-   cout << readNODES[0] << endl;
 
 }
   
@@ -104,64 +97,24 @@ string upperCASE(string wordIN){
   }
   return wordIN;
 }
-void insertEND(LIST** list, NODES** newNODE,string word){
+NODES *insertNODE(LIST** list, NODES** newNODE,string word){
   int index = 0, wordSIZE = 0;
-  NODES *last[26] = {0};
-
   wordSIZE = word.length();
+
   if(wordSIZE > 0){
     index = word[0] - 'A';
     newNODE[index] = new NODES;
     list[index] = new LIST;
     newNODE[index]->word = word;
+
     if(list[index]->lastNODE == NULL){
-      insertBEGIN(list,newNODE,index);
+      list[index]->firstNODE = newNODE[index];
+      list[index]->lastNODE = newNODE[index];
     }  
     else{
-      *last = new NODES;
-      last[index] = list[index]->lastNODE;
-       insertAFTER(list,last,newNODE,index);
-     }
-   }
- }
- void insertBEGIN(LIST** list,NODES** newNODE,int& index){
-   NODES *next[26] = {0};
-   *next = new NODES;
-  
-   if(list[index]->firstNODE == 0){
-     list[index]->firstNODE = newNODE[index];
-     list[index]->lastNODE = newNODE[index];
-     newNODE[index]->backwards = 0;
-     newNODE[index]->forward = 0;
-   }
-   else{
-     next[index] = list[index]->firstNODE;
-     insertBEFORE(list,next,newNODE,index);
+      list[index]->lastNODE->forward = newNODE[index];
+      list[index]->lastNODE = newNODE[index];
+    }
   }
+  return list[index]->firstNODE;
 }
-
-void insertAFTER(LIST** list,NODES** last, NODES** newNODE,int& index){
-  newNODE[index]->backwards = last[index];
-  newNODE[index]->forward = last[index]->forward;
-  if(last[index] == NULL){
-    list[index]->lastNODE = newNODE[index];
-  }
-  else{
-    last[index]->forward = newNODE[index];
-  }
-  last[index]->forward = newNODE[index];
-}
-void insertBEFORE(LIST** list,NODES** next,NODES** newNODE,int& index){
-  next[index] = new NODES;
-  newNODE[index]->backwards = next[index]->backwards;
-  newNODE[index]->forward = next[index];
-  if(next[index] == 0){
-    list[index]->firstNODE = newNODE[index];
-  }
-  else{
-    next[index]->forward = newNODE[index];
-  }
-   next[index]->backwards = newNODE[index];
-}
-
-
