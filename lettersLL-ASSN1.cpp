@@ -29,7 +29,9 @@ void insertBEFORE(LIST** list,NODES** next,NODES** newNODE,int& index);
 
 int main(){
   NODES *newNODE[26] = {0};
+  NODES *readNODES[26] = {0};
   LIST *list[26] = {0};
+  
   ifstream grabFILE;
   string word;
   bool ver = true;
@@ -44,7 +46,10 @@ int main(){
       ver = verifyIO(grabFILE);
     }
   }
-  cout << "END." << endl;
+ 
+  **readNODES = *(*list)->firstNODE;
+   cout << readNODES[0] << endl;
+
 }
   
 void openFILE(ifstream& file){
