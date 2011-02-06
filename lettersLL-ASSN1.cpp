@@ -106,21 +106,28 @@ void PUSH(NODES** first, NODES** last, string word){
 
   if(wordSIZE > 0){
     index = word[0] - 'A';
+    ///create fresh node to add to chosen indexed list
     newNODE[index] = new NODES;
     newNODE[index]->word = word;
     newNODE[index]->fore = 0;
     if(first[index] == NULL){
+      ///kickoff this particular index with both pointers to same node
       first[index] = newNODE[index];
       last[index] = newNODE[index];
     }
-    else{  
+    else{ 
+      ///begin expanding this indexed letter's list 
       while(last[index] != 0){
+        ///secure the previous node before moving pointer forward
         first[index] = last[index];
+        ///move forward one
 	last[index] = last[index]->fore;
       }
+      ///get some memory for node
       last[index] = new NODES;
-      last[index]->fore = newNODE[index];
+      ///pass new node with latest string to last     
       last[index] = newNODE[index];
+      ///grab previous node with first
       last[index]->back = first[index];
     }
   }
