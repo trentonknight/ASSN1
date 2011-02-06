@@ -10,23 +10,23 @@ using namespace std;
 
 struct NODES{
   string word;
-  NODES* forward;
-  NODES* backwards;
-};
-struct LIST{
-  NODES* firstNODE;
-  NODES* lastNODE;
+  NODES* fore;
+  NODES* back;
 };
 
+const int ALPHA = 25;
 void openFILE(ifstream& file);
 string cleanUPIO(string word);
 string upperCASE(string wordIN);
 bool verifyIO(ifstream& file);
-NODES *insertNODE(LIST** list, NODES** newNODE,string word);
+void PUSH(NODES** first, NODES** last,string word);
+void makeNULL(NODES **newNode);
 
 int main(){
-  NODES *newNODE[26] = {0};
-  LIST *list[26] = {0};
+ NODES *first[ALPHA] = {0};
+ NODES *last[ALPHA] = {0};
+ first[ALPHA] = new NODES;
+ last[ALPHA] = new NODES; 
   
   ifstream grabFILE;
   string word;
@@ -38,10 +38,11 @@ int main(){
       grabFILE >> word;
       word = cleanUPIO(word);
       word = upperCASE(word);
-      insertNODE(list,newNODE,word);
+      PUSH(first,last,word);
       ver = verifyIO(grabFILE);
     }
   }
+  cout << "test." << endl;
 
 }
   
@@ -97,24 +98,31 @@ string upperCASE(string wordIN){
   }
   return wordIN;
 }
-NODES *insertNODE(LIST** list, NODES** newNODE,string word){
+void PUSH(NODES** first, NODES** last, string word){
   int index = 0, wordSIZE = 0;
   wordSIZE = word.length();
+  NODES *newNODE[ALPHA] = {0};
+ 
 
   if(wordSIZE > 0){
     index = word[0] - 'A';
     newNODE[index] = new NODES;
-    list[index] = new LIST;
     newNODE[index]->word = word;
-
-    if(list[index]->lastNODE == NULL){
-      list[index]->firstNODE = newNODE[index];
-      list[index]->lastNODE = newNODE[index];
-    }  
-    else{
-      list[index]->lastNODE->forward = newNODE[index];
-      list[index]->lastNODE = newNODE[index];
+    newNODE[index]->fore = 0;
+    if(first[index] == NULL){
+      first[index] = newNODE[index];
+      last[index] = newNODE[index];
+    }
+    else{  
+      while(last[index] != 0){
+        first[index] = last[index];
+	last[index] = last[index]->fore;
+      }
+      last[index] = new NODES;
+      last[index]->fore = newNODE[index];
+      last[index] = newNODE[index];
+      last[index]->back = first[index];
     }
   }
-  return list[index]->firstNODE;
 }
+
