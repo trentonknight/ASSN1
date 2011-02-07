@@ -110,6 +110,7 @@ void PUSH(NODES** first, NODES** last, string word){
     newNODE[index] = new NODES;
     newNODE[index]->word = word;
     newNODE[index]->fore = 0;
+    newNODE[index]->back = 0;
     if(first[index] == NULL){
       ///kickoff this particular index with both pointers to same node
       first[index] = newNODE[index];
@@ -125,7 +126,8 @@ void PUSH(NODES** first, NODES** last, string word){
       }
       ///get some memory for node
       last[index] = new NODES;
-      ///pass new node with latest string to last     
+      ///pass new node with latest string to last
+      first[index]->fore = newNODE[index];     
       last[index] = newNODE[index];
       ///grab previous node with first
       last[index]->back = first[index];
