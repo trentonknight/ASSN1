@@ -38,6 +38,9 @@ int main(){
       grabFILE >> word;
       word = cleanUPIO(word);
       word = upperCASE(word);
+      ///*last is will contain the final list
+      ///*first will be staggered back one NODE after completing the list
+      ///and should not be used for other functions
       PUSH(first,last,word);
       ver = verifyIO(grabFILE);
     }
