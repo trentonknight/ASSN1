@@ -43,7 +43,7 @@ int main(){
     }
   }
   cout << "test." << endl;
-
+  
 }
   
 void openFILE(ifstream& file){
@@ -109,8 +109,9 @@ void PUSH(NODES** first, NODES** last, string word){
     ///create fresh node to add to chosen indexed list
     newNODE[index] = new NODES;
     newNODE[index]->word = word;
-    newNODE[index]->fore = 0;
     newNODE[index]->back = 0;
+    newNODE[index]->fore = 0;
+
     if(first[index] == NULL){
       ///kickoff this particular index with both pointers to same node
       first[index] = newNODE[index];
