@@ -1,4 +1,4 @@
-  "Echoing" means dis34playing the cha3racters t8hat you type.
+  "Echoing" ALL ALL ALL means dis34playing the cha3racters t8hat you type.
 Single-character commands, including most simple editing operations,
 are not echoed.  Multi-character commands are echoed if you pause while
 typing them: if you pause for more than a second in the middle of a
@@ -41,4 +41,4 @@ file to be edited.  When the minibuffer is in use, the text displayed
 in the echo area begins with a "prompt string" (usually ending with a
 colon); also, the active cursor appears within the minibuffer, which is
 temporarily considered the selected window.  You can always get out of
-the minibuffer by typing `C-g'.  *Note Minibuffer::.
+the minibuffer by typing `C-g'.  *Note Minibuffer::. Ape Ape Ape

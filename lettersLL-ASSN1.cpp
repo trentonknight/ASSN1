@@ -19,6 +19,7 @@ void openFILE(ifstream& file);
 string cleanUPIO(string word);
 string upperCASE(string wordIN);
 bool verifyIO(ifstream& file);
+bool noDUPLICATES(NODES** last,string word);
 void PUSH(NODES** first, NODES** last,string word);
 void makeNULL(NODES **newNode);
 
@@ -31,6 +32,7 @@ int main(){
   ifstream grabFILE;
   string word;
   bool ver = true;
+  bool dupWORD = true;
 
   openFILE(grabFILE);
   if(grabFILE.is_open()){
@@ -41,7 +43,10 @@ int main(){
       ///*last is will contain the final list
       ///*first will be staggered back one NODE after completing the list
       ///and should not be used for other functions
+      dupWORD = noDUPLICATES(last,word);
+      if(dupWORD == true){
       PUSH(first,last,word);
+      }
       ver = verifyIO(grabFILE);
     }
   }
@@ -100,6 +105,23 @@ string upperCASE(string wordIN){
     --wordLENGTH;
   }
   return wordIN;
+}
+bool noDUPLICATES(NODES** last,string word){
+  bool nodup = true;
+  int index = 0;
+  NODES *dupNODE[ALPHA] = {0};
+  index = word[0] - 'A';
+  *dupNODE = *last;
+
+  while(dupNODE[index] != 0){ 
+    if(dupNODE[index]->word == word){
+      nodup = false;
+    }
+    dupNODE[index] = new NODES;
+    dupNODE[index] = dupNODE[index]->fore;
+  }
+  return nodup;
+
 }
 void PUSH(NODES** first, NODES** last, string word){
   int index = 0, wordSIZE = 0;
