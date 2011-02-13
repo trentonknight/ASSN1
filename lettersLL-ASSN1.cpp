@@ -110,9 +110,11 @@ bool noDUPLICATES(NODES** last,string word){
   bool nodup = true;
   int index = 0;
   NODES *dupNODE[ALPHA] = {0};
+  NODES *dupNODEbk[ALPHA] = {0};
   index = word[0] - 'A';
   *dupNODE = *last;
-
+  *dupNODEbk = *last;
+  ///traverse to bottom opf list forwards
   while(dupNODE[index] != 0){ 
     if(dupNODE[index]->word == word){
       nodup = false;
@@ -152,10 +154,12 @@ void PUSH(NODES** first, NODES** last, string word){
       }
       ///get some memory for node
       last[index] = new NODES;
-      ///pass new node with latest string to last
+      ///pass new node with latest string to *first forward pointer
+      ///and *last:  "0x0" <-["new"]-> "new"
       first[index]->fore = newNODE[index];     
       last[index] = newNODE[index];
-      ///grab previous node with first
+      ///grab previous node with *last backwards pointer:
+      ///"old" <-["new"]-> "new"
       last[index]->back = first[index];
     }
   }
