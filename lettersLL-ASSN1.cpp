@@ -10,8 +10,8 @@ using namespace std;
 
 struct NODES{
   string word;
-  NODES* fore;
   NODES* back;
+  NODES* front;
 };
 
 const int ALPHA = 25;
@@ -41,7 +41,7 @@ int main(){
       word = cleanUPIO(word);
       word = upperCASE(word);
       ///*last is will contain the final list
-      ///*first will be staggered back one NODE after completing the list
+      ///*first will be staggered front one NODE after completing the list
       ///and should not be used for other functions
       dupWORD = noDUPLICATES(last,word);
       if(dupWORD == true){
@@ -120,7 +120,7 @@ bool noDUPLICATES(NODES** last,string word){
       nodup = false;
     }
     dupNODE[index] = new NODES;
-    dupNODE[index] = dupNODE[index]->fore;
+    dupNODE[index] = dupNODE[index]->back;
   }
   return nodup;
 
@@ -136,8 +136,8 @@ void PUSH(NODES** first, NODES** last, string word){
     ///create fresh node to add to chosen indexed list
     newNODE[index] = new NODES;
     newNODE[index]->word = word;
+    newNODE[index]->front = 0;
     newNODE[index]->back = 0;
-    newNODE[index]->fore = 0;
 
     if(first[index] == NULL){
       ///kickoff this particular index with both pointers to same node
@@ -150,17 +150,17 @@ void PUSH(NODES** first, NODES** last, string word){
         ///secure the previous node before moving pointer forward
         first[index] = last[index];
         ///move forward one
-	last[index] = last[index]->fore;
+	last[index] = last[index]->back;
       }
       ///get some memory for node
       last[index] = new NODES;
       ///pass new node with latest string to *first forward pointer
       ///and *last:  "0x0" <-["new"]-> "new"
-      first[index]->fore = newNODE[index];     
+      first[index]->back = newNODE[index];     
       last[index] = newNODE[index];
-      ///grab previous node with *last backwards pointer:
+      ///grab previous node with *last frontwards pointer:
       ///"old" <-["new"]-> "new"
-      last[index]->back = first[index];
+      last[index]->front = first[index];
     }
   }
 }
