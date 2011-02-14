@@ -15,13 +15,13 @@ struct NODES{
 };
 
 const int ALPHA = 25;
-void openFILE(ifstream& file);
+void openFILE(ifstream& file,string filename);
 string cleanUPIO(string word);
 string upperCASE(string wordIN);
 bool verifyIO(ifstream& file);
 bool noDUPLICATES(NODES** last,string word);
 void PUSH(NODES** first, NODES** last,string word);
-void makeNULL(NODES **newNode);
+void outputLISTS(NODES** last,int unique,int duplicate,string filename);
 
 int main(){
  NODES *first[ALPHA] = {0};
@@ -30,11 +30,12 @@ int main(){
  last[ALPHA] = new NODES; 
   
   ifstream grabFILE;
-  string word;
+  string word,filename;
   bool ver = true;
   bool dupWORD = true;
+  int unique = 0, duplicate = 0;
 
-  openFILE(grabFILE);
+  openFILE(grabFILE,filename);
   if(grabFILE.is_open()){
     while(grabFILE && ver){
       grabFILE >> word;
@@ -46,23 +47,28 @@ int main(){
       dupWORD = noDUPLICATES(last,word);
       if(dupWORD == true){
       PUSH(first,last,word);
+      unique++;
+      }
+      else{
+      duplicate++;
       }
       ver = verifyIO(grabFILE);
     }
   }
   cout << "test." << endl;
+  outputLISTS(last,unique,duplicate,filename);
+  
   
 }
   
-void openFILE(ifstream& file){
-  string filename;
+void openFILE(ifstream& file,string filename){
 
   cout << "Enter file name: " << endl;
   cin >> filename;
   file.open(filename.c_str(), ios::binary);
   if(!file){
     cout << "Whoops! file not found? Try again." << endl;
-    openFILE(file);
+    openFILE(file,filename);
   }
 }
 bool verifyIO(ifstream& file){
@@ -164,4 +170,27 @@ void PUSH(NODES** first, NODES** last, string word){
     }
   }
 }
+void outputLISTS(NODES** last,int unique,int duplicate,string filename){
 
+  int listLENGTH = 0;
+  int alphabet = 0;
+  int total = unique + duplicate;
+  char letter;
+  
+  cout << "Results for " << filename << ":" << total << " total words processed." << endl; 
+
+  for(alphabet = 0; alphabet < 26; alphabet++){
+    listLENGTH = 0;
+    if(last[alphabet] != 0){
+    letter = last[alphabet]->word[0];
+    while(last[alphabet] != 0){
+       listLENGTH++;
+       last[alphabet] = last[alphabet]->front;
+    }
+    if(letter > 0){
+    cout << listLENGTH << " words begining with " << letter << endl;
+    letter = '\0';
+    }
+    }
+  }
+}
