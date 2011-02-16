@@ -14,10 +14,11 @@ struct NODES{
   NODES* front;
 };
 
-const int ALPHA = 25;
+const int ALPHA = 26;
 void openFILE(ifstream& file,string filename);
 string cleanUPIO(string word);
 string upperCASE(string wordIN);
+string lowerCASE(string wordIN);
 bool verifyIO(ifstream& file);
 bool noDUPLICATES(NODES** last,string word);
 void PUSH(NODES** first, NODES** last,string word);
@@ -55,7 +56,6 @@ int main(){
       ver = verifyIO(grabFILE);
     }
   }
-  cout << "test." << endl;
   outputLISTS(last,unique,duplicate,filename);
   
   
@@ -112,14 +112,23 @@ string upperCASE(string wordIN){
   }
   return wordIN;
 }
+string lowerCASE(string wordIN){
+  int count = 0;
+  int wordLENGTH = wordIN.length();
+
+  while(wordLENGTH != 0){
+    wordIN[count] = tolower(wordIN[count]);
+    count++;
+    --wordLENGTH;
+  }
+  return wordIN;
+}
 bool noDUPLICATES(NODES** last,string word){
   bool nodup = true;
   int index = 0;
   NODES *dupNODE[ALPHA] = {0};
-  NODES *dupNODEbk[ALPHA] = {0};
   index = word[0] - 'A';
   *dupNODE = *last;
-  *dupNODEbk = *last;
   ///traverse to bottom opf list forwards
   while(dupNODE[index] != 0){ 
     if(dupNODE[index]->word == word){
@@ -129,7 +138,6 @@ bool noDUPLICATES(NODES** last,string word){
     dupNODE[index] = dupNODE[index]->back;
   }
   return nodup;
-
 }
 void PUSH(NODES** first, NODES** last, string word){
   int index = 0, wordSIZE = 0;
@@ -175,7 +183,8 @@ void outputLISTS(NODES** last,int unique,int duplicate,string filename){
   int listLENGTH = 0;
   int alphabet = 0;
   int total = unique + duplicate;
-  char letter;
+  int largest = 0;
+  string  letter, largeLETTER;
   
   cout << "Results for " << filename << ":" << total << " total words processed." << endl; 
 
@@ -187,10 +196,21 @@ void outputLISTS(NODES** last,int unique,int duplicate,string filename){
        listLENGTH++;
        last[alphabet] = last[alphabet]->front;
     }
-    if(letter > 0){
+    if(letter.length() > 0){
     cout << listLENGTH << " words begining with " << letter << endl;
-    letter = '\0';
+    if(listLENGTH > largest){
+      largest = listLENGTH;
+      largeLETTER = "'" + lowerCASE(letter) + "'/'" + letter;
+    }
+    else if(listLENGTH == largest){
+      largeLETTER.append("\n");
+      largeLETTER.append("'" + lowerCASE(letter) + "'/'" + letter);
+    }
     }
     }
   }
+  cout << "There were " << unique << " unique words in the file."<< endl;
+  cout << "The highest word count was " << largest << endl;
+  cout << "Letter(s) that began words 4 times were: " << endl;
+  cout << largeLETTER << endl;
 }
