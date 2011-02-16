@@ -1,10 +1,6 @@
 #include <iostream>
 #include <fstream>
-#include <cctype>
 #include <iomanip>
-#include <stdio.h>
-#include <string.h>
-#include <cstring>
 
 using namespace std;
 
@@ -19,7 +15,6 @@ void openFILE(ifstream& file,string filename);
 string cleanUPIO(string word);
 string upperCASE(string wordIN);
 string lowerCASE(string wordIN);
-bool verifyIO(ifstream& file);
 bool noDUPLICATES(NODES** last,string word);
 void PUSH(NODES** first, NODES** last,string word);
 void outputLISTS(NODES** last,int unique,int duplicate,string filename);
@@ -30,19 +25,15 @@ int main(){
 
   ifstream grabFILE;
   string word = "\0",filename = "\0";
-  bool ver = true;
   bool dupWORD = true;
   int unique = 0, duplicate = 0;
 
   openFILE(grabFILE,filename);
   if(grabFILE.is_open()){
-    while(grabFILE && ver){
+    while(grabFILE){
       grabFILE >> word;
       word = cleanUPIO(word);
       word = upperCASE(word);
-      ///*last is will contain the final list
-      ///*first will be staggered front one NODE after completing the list
-      ///and should not be used for other functions
       if(word.length() > 0){
       dupWORD = noDUPLICATES(last,word);
       if(dupWORD == true){
@@ -53,12 +44,9 @@ int main(){
       duplicate++;
       }
       }
-      ver = verifyIO(grabFILE);
     }
   }
-  outputLISTS(last,unique,duplicate,filename);
-  
-  
+  outputLISTS(last,unique,duplicate,filename); 
 }
 void openFILE(ifstream& file,string filename){
 
@@ -69,19 +57,6 @@ void openFILE(ifstream& file,string filename){
     cout << "Whoops! file not found? Try again." << endl;
     openFILE(file,filename);
   }
-}
-bool verifyIO(ifstream& file){
-
-  bool check = true;
-  ios::iostate i;
-
-  i = file.rdstate();
-  
-  if(i & ios::eofbit|| i & ios::failbit || i & ios::badbit){
-    check = false;
-  }
-
-  return check;
 }
 string cleanUPIO(string word){
   size_t first, numbers;
@@ -193,7 +168,7 @@ void outputLISTS(NODES** last,int unique,int duplicate,string filename){
   int largest = 0;
   string  letter, largeLETTER;
   
-  cout << "Results for " << filename << ":" << total << " total words processed." << endl; 
+  cout << "Results for " << filename << ":" << total << " total words processed." << "\n" << endl; 
 
   for(alphabet = 0; alphabet < 26; alphabet++){
     listLENGTH = 0;
@@ -204,7 +179,7 @@ void outputLISTS(NODES** last,int unique,int duplicate,string filename){
        last[alphabet] = last[alphabet]->front;
     }
     if(letter.length() > 0){
-    cout << listLENGTH << " words begining with " << letter << endl;
+      cout << setw(5) << listLENGTH << right <<" words begining with" << setw(2) << letter << endl;
     if(listLENGTH > largest){
       largest = listLENGTH;
       largeLETTER = "'" + lowerCASE(letter) + "'/'" + letter;
@@ -216,8 +191,8 @@ void outputLISTS(NODES** last,int unique,int duplicate,string filename){
     }
     }
   }
-  cout << "There were " << unique << " unique words in the file."<< endl;
+  cout << "\nThere were " << unique << " unique words in the file."<< endl;
   cout << "The highest word count was " << largest << endl;
-  cout << "Letter(s) that began words "<< largest <<" times were: " << endl;
-  cout << largeLETTER << endl;
+  cout << "\nLetter(s) that began words "<< largest <<" times were: " << endl;
+  cout << setw(9) << right << largeLETTER << endl;
 }
