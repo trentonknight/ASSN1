@@ -27,11 +27,9 @@ void outputLISTS(NODES** last,int unique,int duplicate,string filename);
 int main(){
  NODES *first[ALPHA] = {0};
  NODES *last[ALPHA] = {0};
- first[ALPHA] = new NODES;
- last[ALPHA] = new NODES; 
-  
+
   ifstream grabFILE;
-  string word,filename;
+  string word = "\0",filename = "\0";
   bool ver = true;
   bool dupWORD = true;
   int unique = 0, duplicate = 0;
@@ -45,6 +43,7 @@ int main(){
       ///*last is will contain the final list
       ///*first will be staggered front one NODE after completing the list
       ///and should not be used for other functions
+      if(word.length() > 0){
       dupWORD = noDUPLICATES(last,word);
       if(dupWORD == true){
       PUSH(first,last,word);
@@ -53,6 +52,7 @@ int main(){
       else{
       duplicate++;
       }
+      }
       ver = verifyIO(grabFILE);
     }
   }
@@ -60,7 +60,6 @@ int main(){
   
   
 }
-  
 void openFILE(ifstream& file,string filename){
 
   cout << "Enter file name: " << endl;
@@ -128,24 +127,32 @@ bool noDUPLICATES(NODES** last,string word){
   int index = 0;
   NODES *dupNODE[ALPHA] = {0};
   index = word[0] - 'A';
-  *dupNODE = *last;
+  dupNODE[index] = last[index];
   ///traverse to bottom opf list forwards
-  while(dupNODE[index] != 0){ 
+  while(dupNODE[index] != 0 && nodup){ 
+    if(dupNODE[index]->word == word){
+      nodup = false;
+      delete *dupNODE;
+    }
+    dupNODE[index] = dupNODE[index]->back;
+  }
+  if(nodup){
+  delete *dupNODE;
+  *dupNODE = *last;
+  while(dupNODE[index] != 0 && nodup){ 
     if(dupNODE[index]->word == word){
       nodup = false;
     }
-    dupNODE[index] = new NODES;
-    dupNODE[index] = dupNODE[index]->back;
+    dupNODE[index] = dupNODE[index]->front;
+  }
   }
   return nodup;
 }
 void PUSH(NODES** first, NODES** last, string word){
-  int index = 0, wordSIZE = 0;
-  wordSIZE = word.length();
+  int index = 0;
   NODES *newNODE[ALPHA] = {0};
  
 
-  if(wordSIZE > 0){
     index = word[0] - 'A';
     ///create fresh node to add to chosen indexed list
     newNODE[index] = new NODES;
@@ -176,7 +183,7 @@ void PUSH(NODES** first, NODES** last, string word){
       ///"old" <-["new"]-> "new"
       last[index]->front = first[index];
     }
-  }
+
 }
 void outputLISTS(NODES** last,int unique,int duplicate,string filename){
 
@@ -211,6 +218,6 @@ void outputLISTS(NODES** last,int unique,int duplicate,string filename){
   }
   cout << "There were " << unique << " unique words in the file."<< endl;
   cout << "The highest word count was " << largest << endl;
-  cout << "Letter(s) that began words 4 times were: " << endl;
+  cout << "Letter(s) that began words "<< largest <<" times were: " << endl;
   cout << largeLETTER << endl;
 }
