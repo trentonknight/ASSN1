@@ -1,3 +1,12 @@
+/////////////////////////////////////////////////////////////////////////
+///CODE FILENAME: Name of file
+///DESCRIPTION:   Simple Doubly Linked list which reads and counts the amount
+///               of unique words found.
+///  DATE:        Date to be turned in
+///  DESIGNER:    Jason N Mansfield
+///  FUNCTIONS:   openFILE(),cleanUPIO(),upperCASE(),lowerCASE(),noDUPLICATES(),
+///               PUSH(),outputLISTS().
+/////////////////////////////////////////////////////////////////////////
 #include <iostream>
 #include <fstream>
 #include <iomanip>
@@ -18,7 +27,24 @@ string lowerCASE(string wordIN);
 bool noDUPLICATES(NODES** last,string word);
 void PUSH(NODES** first, NODES** last,string word);
 void outputLISTS(NODES** last,int unique,int duplicate,string filename);
-
+///////////////////////////////////////////////////////////////////////////
+///  FUNCTION:   main()
+///  DESCRIPTION:  main driver program for all functions
+///  INPUT:
+///      Parameters:string word is used to hold all words streamed from grabFILE.
+///                 dupWORD is boolean and will negate a word from entering any list
+///                 due to its being a duplicate.
+///                 pointers to arrays *first and *last are used to maintain list of words
+///                 *first becomes staggered one node behind *last so *last is used for final 
+///                 traversal at the final function used for counting and displaying all full lists.
+///                 *first is staggered for holding previous node.
+///      File:      ifstream grabFILE streams one word per loop cycle from chosen
+///                 document.
+///  OUTPUT:   
+///      Return Val: returns 0 if run without error
+///  CALLS TO: openFILE(),cleanUPIO(),upperCASE(),noDUPLICATES(),
+///            PUSH(),outputLISTS().
+//////////////////////////////////////////////////////////////////////////
 int main(){
  NODES *first[ALPHA] = {0};
  NODES *last[ALPHA] = {0};
@@ -47,7 +73,21 @@ int main(){
     }
   }
   outputLISTS(last,unique,duplicate,filename); 
+  return 0;
 }
+///////////////////////////////////////////////////////////////////////////
+///  FUNCTION:   openFILE
+///  DESCRIPTION:   simple function which recieves users requested file name and then 
+///                 verifies file actually exists.
+///  INPUT:
+///      Parameters: string filename input from user.
+///      File:    nothing is streaming from file function only verifies file name.
+///  OUTPUT:   
+///      Return Val: returns filename to main otherwise alerts user file
+///                  is not found.
+///      Parameters: open filename.c_str() returned to main() 
+///  CALLS TO:  recursivly calls on itself if filename is wrong openFILE().
+//////////////////////////////////////////////////////////////////////////
 void openFILE(ifstream& file,string filename){
 
   cout << "Enter file name: " << endl;
@@ -58,6 +98,17 @@ void openFILE(ifstream& file,string filename){
     openFILE(file,filename);
   }
 }
+///////////////////////////////////////////////////////////////////////////
+///  FUNCTION:    cleanUPIO
+///  DESCRIPTION: will either erase word for containing numbers or will trim off 
+///               unwanted special characters by looping through word.
+///  INPUT:
+///      Parameters: string word 
+///  OUTPUT:   
+///      Return Val: function will return either an erased string or a cleaned up 
+///                  string without unwanted characters
+///      Parameters: string word
+//////////////////////////////////////////////////////////////////////////
 string cleanUPIO(string word){
   size_t first, numbers;
 
@@ -75,6 +126,18 @@ string cleanUPIO(string word){
     }
   return word;
 }
+///////////////////////////////////////////////////////////////////////////
+///  FUNCTION:    Name of function
+///  DESCRIPTION:    Description of purpose of function
+///  INPUT:
+///      Parameters: Name and description of each input parameter
+///      File:      Brief description of data read from file
+///  OUTPUT:   
+///      Return Val: Description of data returned by a function
+///      Parameters: Name and description of the output parameters
+///      File:    Brief description of data written to file
+///  CALLS TO:  List of programmer-written functions called (names only)
+//////////////////////////////////////////////////////////////////////////
 string upperCASE(string wordIN){
   int count = 0;
   int wordLENGTH = wordIN.length();
@@ -86,6 +149,18 @@ string upperCASE(string wordIN){
   }
   return wordIN;
 }
+///////////////////////////////////////////////////////////////////////////
+///  FUNCTION:    Name of function
+///  DESCRIPTION:    Description of purpose of function
+///  INPUT:
+///      Parameters: Name and description of each input parameter
+///      File:      Brief description of data read from file
+///  OUTPUT:   
+///      Return Val: Description of data returned by a function
+///      Parameters: Name and description of the output parameters
+///      File:    Brief description of data written to file
+///  CALLS TO:  List of programmer-written functions called (names only)
+//////////////////////////////////////////////////////////////////////////
 string lowerCASE(string wordIN){
   int count = 0;
   int wordLENGTH = wordIN.length();
@@ -97,6 +172,18 @@ string lowerCASE(string wordIN){
   }
   return wordIN;
 }
+///////////////////////////////////////////////////////////////////////////
+///  FUNCTION:    Name of function
+///  DESCRIPTION:    Description of purpose of function
+///  INPUT:
+///      Parameters: Name and description of each input parameter
+///      File:      Brief description of data read from file
+///  OUTPUT:   
+///      Return Val: Description of data returned by a function
+///      Parameters: Name and description of the output parameters
+///      File:    Brief description of data written to file
+///  CALLS TO:  List of programmer-written functions called (names only)
+//////////////////////////////////////////////////////////////////////////
 bool noDUPLICATES(NODES** last,string word){
   bool nodup = true;
   int index = 0;
@@ -104,7 +191,7 @@ bool noDUPLICATES(NODES** last,string word){
   index = word[0] - 'A';
   dupNODE[index] = new NODES;
   dupNODE[index] = last[index];
-  ///traverse to bottom opf list forwards
+  ///traverse to bottom of list forwards
   while(dupNODE[index] != 0 && nodup){ 
     if(dupNODE[index]->word == word){
       nodup = false;
@@ -124,6 +211,18 @@ bool noDUPLICATES(NODES** last,string word){
   }
   return nodup;
 }
+///////////////////////////////////////////////////////////////////////////
+///  FUNCTION:    Name of function
+///  DESCRIPTION:    Description of purpose of function
+///  INPUT:
+///      Parameters: Name and description of each input parameter
+///      File:      Brief description of data read from file
+///  OUTPUT:   
+///      Return Val: Description of data returned by a function
+///      Parameters: Name and description of the output parameters
+///      File:    Brief description of data written to file
+///  CALLS TO:  List of programmer-written functions called (names only)
+//////////////////////////////////////////////////////////////////////////
 void PUSH(NODES** first, NODES** last, string word){
   int index = 0;
   NODES *newNODE[ALPHA] = {0};
@@ -150,7 +249,8 @@ void PUSH(NODES** first, NODES** last, string word){
 	last[index] = last[index]->back;
       }
       ///pass new node with latest string to backwards pointer
-      ///*first->back = "0x0" <-[newNODE]-> "0x0"
+      ///*first->back = "0x0" <-[newNODE]-> "0x0" and 
+      ///*first = previous NODE from while loop above
       first[index]->back = newNODE[index];     
       ///grab previously created and saved node with frontwards pointer
       ///from *first:
@@ -162,6 +262,18 @@ void PUSH(NODES** first, NODES** last, string word){
     }
 
 }
+///////////////////////////////////////////////////////////////////////////
+///  FUNCTION:    Name of function
+///  DESCRIPTION:    Description of purpose of function
+///  INPUT:
+///      Parameters: Name and description of each input parameter
+///      File:      Brief description of data read from file
+///  OUTPUT:   
+///      Return Val: Description of data returned by a function
+///      Parameters: Name and description of the output parameters
+///      File:    Brief description of data written to file
+///  CALLS TO:  List of programmer-written functions called (names only)
+//////////////////////////////////////////////////////////////////////////
 void outputLISTS(NODES** last,int unique,int duplicate,string filename){
 
   int listLENGTH = 0,
