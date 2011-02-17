@@ -171,14 +171,19 @@ void outputLISTS(NODES** last,int unique,int duplicate,string filename){
 
   for(alphabet = 0; alphabet < 26; alphabet++){
     listLENGTH = 0;
-    if(last[alphabet] != 0){
-    letter = last[alphabet]->word[0];
     while(last[alphabet] != 0){
        listLENGTH++;
        last[alphabet] = last[alphabet]->front;
     }
-    if(letter.length() > 0){
-      cout << setw(5) << listLENGTH << right <<" words begining with" << setw(2) << letter << endl;
+    letter = '"' + alphabet - 3 + '"';
+    if(listLENGTH > 0){
+      cout << setw(5) << listLENGTH << right <<" words begining with" << setw(7)
+           << "'" + lowerCASE(letter) + "'/'" + letter << "':" << endl;
+    while(last[alphabet] != 0){
+       cout << last[alphabet]->word;
+       last[alphabet] = last[alphabet]->back;
+    }
+    cout << endl;
     if(listLENGTH > largest){
       largest = listLENGTH;
       largeLETTER = "'" + lowerCASE(letter) + "'/'" + letter;
@@ -186,7 +191,6 @@ void outputLISTS(NODES** last,int unique,int duplicate,string filename){
     else if(listLENGTH == largest){
       largeLETTER.append("\n");
       largeLETTER.append("'" + lowerCASE(letter) + "'/'" + letter);
-    }
     }
     }
   }
