@@ -180,6 +180,7 @@ void outputLISTS(NODES** last,int unique,int duplicate,string filename){
       cout << setw(5) << listLENGTH << right <<" words begining with" << setw(7)
            << "'" + lowerCASE(letter) + "'/'" + letter << "':" << endl;
     while(last[alphabet] != 0){
+      ///need a backwards pointer created on the end of list in previous function
        cout << last[alphabet]->word;
        last[alphabet] = last[alphabet]->back;
     }
