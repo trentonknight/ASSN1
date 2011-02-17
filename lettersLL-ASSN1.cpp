@@ -33,8 +33,8 @@ int main(){
     while(grabFILE){
       grabFILE >> word;
       word = cleanUPIO(word);
-      word = upperCASE(word);
       if(word.length() > 0){
+      word = upperCASE(word);
       dupWORD = noDUPLICATES(last,word);
       if(dupWORD == true){
       PUSH(first,last,word);
@@ -102,6 +102,7 @@ bool noDUPLICATES(NODES** last,string word){
   int index = 0;
   NODES *dupNODE[ALPHA] = {0};
   index = word[0] - 'A';
+  dupNODE[index] = new NODES;
   dupNODE[index] = last[index];
   ///traverse to bottom opf list forwards
   while(dupNODE[index] != 0 && nodup){ 
@@ -148,8 +149,6 @@ void PUSH(NODES** first, NODES** last, string word){
         ///move forward one
 	last[index] = last[index]->back;
       }
-      ///get some memory for node
-      last[index] = new NODES;
       ///pass new node with latest string to *first forward pointer
       ///and *last:  "0x0" <-["new"]-> "new"
       first[index]->back = newNODE[index];     
