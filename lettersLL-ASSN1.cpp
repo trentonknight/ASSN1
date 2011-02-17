@@ -171,7 +171,8 @@ void outputLISTS(NODES** last,int unique,int duplicate,string filename){
 
   for(alphabet = 0; alphabet < 26; alphabet++){
     listLENGTH = 0;
-    while(last[alphabet] != 0){
+    if(last[alphabet] != 0){
+    while(last[alphabet]->front != 0){
        listLENGTH++;
        last[alphabet] = last[alphabet]->front;
     }
@@ -179,9 +180,9 @@ void outputLISTS(NODES** last,int unique,int duplicate,string filename){
     if(listLENGTH > 0){
       cout << setw(5) << listLENGTH << right <<" words begining with" << setw(7)
            << "'" + lowerCASE(letter) + "'/'" + letter << "':" << endl;
-    while(last[alphabet] != 0){
+    while(last[alphabet]->back != 0){
       ///need a backwards pointer created on the end of list in previous function
-       cout << last[alphabet]->word;
+      cout << last[alphabet]->word << " " << right;
        last[alphabet] = last[alphabet]->back;
     }
     cout << endl;
@@ -193,7 +194,8 @@ void outputLISTS(NODES** last,int unique,int duplicate,string filename){
       largeLETTER.append("\n");
       largeLETTER.append("'" + lowerCASE(letter) + "'/'" + letter);
     }
-    }
+  }
+  }
   }
   cout << "\nThere were " << unique << " unique words in the file."<< endl;
   cout << "The highest word count was " << largest << endl;
