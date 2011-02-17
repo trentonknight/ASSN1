@@ -146,25 +146,28 @@ void PUSH(NODES** first, NODES** last, string word){
       while(last[index] != 0){
         ///secure the previous node before moving pointer forward
         first[index] = last[index];
-        ///move forward one
+        ///now move forward one traversing backwards
 	last[index] = last[index]->back;
       }
-      ///pass new node with latest string to *first forward pointer
-      ///and *last:  "0x0" <-["new"]-> "new"
+      ///pass new node with latest string to backwards pointer
+      ///*first->back = "0x0" <-[newNODE]-> "0x0"
       first[index]->back = newNODE[index];     
-      last[index] = newNODE[index];
-      ///grab previous node with *last frontwards pointer:
-      ///"old" <-["new"]-> "new"
+      ///grab previously created and saved node with frontwards pointer
+      ///from *first:
+      /// prevNODE<-back<-*last->front->newNODE 
+      /// |                             |
+      /// [word]                        [word]
+      last[index] = newNODE[index];  
       last[index]->front = first[index];
     }
 
 }
 void outputLISTS(NODES** last,int unique,int duplicate,string filename){
 
-  int listLENGTH = 0;
-  int alphabet = 0;
-  int total = unique + duplicate;
-  int largest = 0;
+  int listLENGTH = 0,
+      alphabet = 0,
+      total = unique + duplicate,
+      largest = 0;
   string  letter, largeLETTER;
   
   cout << "Results for " << filename << ":" << total << " total words processed." << "\n" << endl; 
@@ -181,8 +184,7 @@ void outputLISTS(NODES** last,int unique,int duplicate,string filename){
       cout << setw(5) << listLENGTH << right <<" words begining with" << setw(7)
            << "'" + lowerCASE(letter) + "'/'" + letter << "':" << endl;
     while(last[alphabet]->back != 0){
-      ///need a backwards pointer created on the end of list in previous function
-      cout << last[alphabet]->word << " " << right;
+       cout << last[alphabet]->word << " " << right;
        last[alphabet] = last[alphabet]->back;
     }
     cout << endl;
