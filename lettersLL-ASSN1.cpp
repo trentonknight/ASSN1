@@ -26,7 +26,7 @@ string upperCASE(string wordIN);
 string lowerCASE(string wordIN);
 bool noDUPLICATES(NODES** last,string word);
 void PUSH(NODES** first, NODES** last,string word);
-void outputLISTS(NODES** last,int unique,int duplicate,string filename);
+void outputLISTS(NODES** last,string filename,int parsed);
 ///////////////////////////////////////////////////////////////////////////
 ///  FUNCTION:   main()
 ///  DESCRIPTION:  main driver program for all functions
@@ -52,27 +52,36 @@ int main(){
   ifstream grabFILE;
   string word = "\0",filename = "\0";
   bool dupWORD = true;
-  int unique = 0, duplicate = 0;
+  int parsed = 0;
 
   openFILE(grabFILE,filename);
   if(grabFILE.is_open()){
     while(grabFILE){
+      ///stream new word
       grabFILE >> word;
+      ///clean up word
       word = cleanUPIO(word);
+      ///if word was not erased continue
+      ///towards adding to list
       if(word.length() > 0){
       word = upperCASE(word);
+      ///counts total words parsed
+      parsed++;
+      ///if dupWORD becomes false word will not be added
+      ///to list
       dupWORD = noDUPLICATES(last,word);
       if(dupWORD == true){
+      ///if word passed all the previous verifications
+      ///and clean up add to list
       PUSH(first,last,word);
-      unique++;
-      }
-      else{
-      duplicate++;
       }
       }
     }
   }
-  outputLISTS(last,unique,duplicate,filename); 
+  ///close document
+  grabFILE.close();
+  ///count and output info to user
+  outputLISTS(last,filename,parsed); 
   return 0;
 }
 ///////////////////////////////////////////////////////////////////////////
@@ -127,16 +136,14 @@ string cleanUPIO(string word){
   return word;
 }
 ///////////////////////////////////////////////////////////////////////////
-///  FUNCTION:    Name of function
-///  DESCRIPTION:    Description of purpose of function
+///  FUNCTION:    upperCASE
+///  DESCRIPTION: simple loop which goes through string making all characters
+///               uppercase
 ///  INPUT:
-///      Parameters: Name and description of each input parameter
-///      File:      Brief description of data read from file
+///      Parameters: wordIN[] 
 ///  OUTPUT:   
-///      Return Val: Description of data returned by a function
-///      Parameters: Name and description of the output parameters
-///      File:    Brief description of data written to file
-///  CALLS TO:  List of programmer-written functions called (names only)
+///      Return Val: wordIN
+///      Parameters: wordIN[] now all uppercase via toupper()
 //////////////////////////////////////////////////////////////////////////
 string upperCASE(string wordIN){
   int count = 0;
@@ -150,16 +157,14 @@ string upperCASE(string wordIN){
   return wordIN;
 }
 ///////////////////////////////////////////////////////////////////////////
-///  FUNCTION:    Name of function
-///  DESCRIPTION:    Description of purpose of function
+///  FUNCTION:    lowerCASE
+///  DESCRIPTION: simple loop which goes through string making all characters
+///               lowercase
 ///  INPUT:
-///      Parameters: Name and description of each input parameter
-///      File:      Brief description of data read from file
+///      Parameters: wordIN[] 
 ///  OUTPUT:   
-///      Return Val: Description of data returned by a function
-///      Parameters: Name and description of the output parameters
-///      File:    Brief description of data written to file
-///  CALLS TO:  List of programmer-written functions called (names only)
+///      Return Val: wordIN
+///      Parameters: wordIN[] now all lowercase via tolower()
 //////////////////////////////////////////////////////////////////////////
 string lowerCASE(string wordIN){
   int count = 0;
@@ -173,16 +178,16 @@ string lowerCASE(string wordIN){
   return wordIN;
 }
 ///////////////////////////////////////////////////////////////////////////
-///  FUNCTION:    Name of function
-///  DESCRIPTION:    Description of purpose of function
+///  FUNCTION:    noDUPLICATES
+///  DESCRIPTION: this function traverses through existing list looking for any
+///               strings that match the current new string. If a match is found then
+///               a boolean false is returned to reject this duplicate string as it would
+///               create an undesired duplicate word for this particular program.
 ///  INPUT:
-///      Parameters: Name and description of each input parameter
-///      File:      Brief description of data read from file
+///      Parameters: NODES** last and string word
 ///  OUTPUT:   
-///      Return Val: Description of data returned by a function
-///      Parameters: Name and description of the output parameters
-///      File:    Brief description of data written to file
-///  CALLS TO:  List of programmer-written functions called (names only)
+///      Return Val: true or false boolean value
+///      Parameters: boolean nodup
 //////////////////////////////////////////////////////////////////////////
 bool noDUPLICATES(NODES** last,string word){
   bool nodup = true;
@@ -195,12 +200,10 @@ bool noDUPLICATES(NODES** last,string word){
   while(dupNODE[index] != 0 && nodup){ 
     if(dupNODE[index]->word == word){
       nodup = false;
-      delete *dupNODE;
     }
     dupNODE[index] = dupNODE[index]->back;
   }
   if(nodup){
-  delete *dupNODE;
   *dupNODE = *last;
   while(dupNODE[index] != 0 && nodup){ 
     if(dupNODE[index]->word == word){
@@ -212,16 +215,21 @@ bool noDUPLICATES(NODES** last,string word){
   return nodup;
 }
 ///////////////////////////////////////////////////////////////////////////
-///  FUNCTION:    Name of function
-///  DESCRIPTION:    Description of purpose of function
+///  FUNCTION:    PUSH
+///  DESCRIPTION: function creates a new NODE and adds new word to it. It then pushes
+///               each new NODE to list while maintaining previous NODES forming a doubly linked list.
+///               Each list is placed in the appropriate array by finding the first letter of this particular string.
+///               For example A = 0, B = 1, C = 2, etc...
+///               int index reflects the proper array for this particular list.
 ///  INPUT:
-///      Parameters: Name and description of each input parameter
-///      File:      Brief description of data read from file
+///      Parameters: NODES** first, last and string word
+///                  first: previous node
+///                  last: current node
+///                  word: current incomming word
 ///  OUTPUT:   
-///      Return Val: Description of data returned by a function
-///      Parameters: Name and description of the output parameters
-///      File:    Brief description of data written to file
-///  CALLS TO:  List of programmer-written functions called (names only)
+///      Return Val: NODES** first, last
+///      Parameters: first: previous node
+///                  last: current node
 //////////////////////////////////////////////////////////////////////////
 void PUSH(NODES** first, NODES** last, string word){
   int index = 0;
@@ -245,7 +253,7 @@ void PUSH(NODES** first, NODES** last, string word){
       while(last[index] != 0){
         ///secure the previous node before moving pointer forward
         first[index] = last[index];
-        ///now move forward one traversing backwards
+        ///traverse backwards
 	last[index] = last[index]->back;
       }
       ///pass new node with latest string to backwards pointer
@@ -257,32 +265,43 @@ void PUSH(NODES** first, NODES** last, string word){
       /// prevNODE<-back<-*last->front->newNODE 
       /// |                             |
       /// [word]                        [word]
-      last[index] = newNODE[index];  
+      last[index] = newNODE[index];
+      ///after allocating memory grab backwards node from first
+      ///which was secured in above while loop.  
       last[index]->front = first[index];
     }
 
 }
 ///////////////////////////////////////////////////////////////////////////
-///  FUNCTION:    Name of function
-///  DESCRIPTION:    Description of purpose of function
+///  FUNCTION:    outputLISTS
+///  DESCRIPTION: function double checks list and counts each node forwards. 
+///               After verifying list length; list is traversed once again 
+///               backwards for printout of each found word.
 ///  INPUT:
-///      Parameters: Name and description of each input parameter
-///      File:      Brief description of data read from file
+///      Parameters: NODES** last: contain's all arrays of lists
+///                  int parsed: total words parsed
+///                  string filename: simply for printing file used to user 
 ///  OUTPUT:   
-///      Return Val: Description of data returned by a function
-///      Parameters: Name and description of the output parameters
-///      File:    Brief description of data written to file
-///  CALLS TO:  List of programmer-written functions called (names only)
+///      Return Val: prints information to user.
+///      Parameters: string filename: name of file used.
+///                  int parsed: number of words actually parsed.
+///                  listLENGTH: length of each array of letters.
+///                  total: total amount of unique words found.
+///                  largest: the largest list or lists found.
+///                  letter: the letter of current list being shown.
+///                  largeLETTER: the letter or letters with the largest 
+///                  count found in document.
+///  CALLS TO: lowerCASE()
 //////////////////////////////////////////////////////////////////////////
-void outputLISTS(NODES** last,int unique,int duplicate,string filename){
+void outputLISTS(NODES** last,string filename,int parsed){
 
   int listLENGTH = 0,
       alphabet = 0,
-      total = unique + duplicate,
+      total = 0,
       largest = 0;
   string  letter, largeLETTER;
   
-  cout << "Results for " << filename << ":" << total << " total words processed." << "\n" << endl; 
+  cout << "Results for " << filename << ":" << parsed << " total words processed." << "\n" << endl; 
 
   for(alphabet = 0; alphabet < 26; alphabet++){
     listLENGTH = 0;
@@ -290,7 +309,8 @@ void outputLISTS(NODES** last,int unique,int duplicate,string filename){
     while(last[alphabet]->front != 0){
        listLENGTH++;
        last[alphabet] = last[alphabet]->front;
-    }
+       total++;    
+}
     letter = '"' + alphabet - 3 + '"';
     if(listLENGTH > 0){
       cout << setw(5) << listLENGTH << right <<" words begining with" << setw(7)
@@ -311,7 +331,7 @@ void outputLISTS(NODES** last,int unique,int duplicate,string filename){
   }
   }
   }
-  cout << "\nThere were " << unique << " unique words in the file."<< endl;
+  cout << "\nThere were " << total << " unique words in the file."<< endl;
   cout << "The highest word count was " << largest << endl;
   cout << "\nLetter(s) that began words "<< largest <<" times were: " << endl;
   cout << setw(9) << right << largeLETTER << endl;
