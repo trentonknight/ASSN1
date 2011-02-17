@@ -306,7 +306,7 @@ void outputLISTS(NODES** last,string filename,int parsed){
   for(alphabet = 0; alphabet < 26; alphabet++){
     listLENGTH = 0;
     if(last[alphabet] != 0){
-    while(last[alphabet]->front != 0){
+    while(last[alphabet] != 0){
        listLENGTH++;
        last[alphabet] = last[alphabet]->front;
        total++;    
@@ -315,7 +315,7 @@ void outputLISTS(NODES** last,string filename,int parsed){
     if(listLENGTH > 0){
       cout << setw(5) << listLENGTH << right <<" words begining with" << setw(7)
            << "'" + lowerCASE(letter) + "'/'" + letter << "':" << endl;
-    while(last[alphabet]->back != 0){
+    while(last[alphabet] != 0){
        cout << last[alphabet]->word << " " << right;
        last[alphabet] = last[alphabet]->back;
     }
